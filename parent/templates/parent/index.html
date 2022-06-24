@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>    
+    <form method="post">
+        {% csrf_token %}
+    
+        {% comment %} This is the parent information {% endcomment %}
+        <div class="container mt-3" style="border:1px solid #cecece;">
+    
+            <div class="row">
+                <div class="col mt-3 mb-3">
+                    <h2>Parent Information</h2>
+                </div>
+            </div>
+    
+    
+            <div class="row">
+                <div class="col mb-3">
+                    <label for="formGroupExampleInput" class="form-label">{{pform.first_name.label_tag}}</label><br>
+                    {{pform.first_name}}{{pform.first_name.errors}}
+                </div>
+            </div>
+    
+            <div class="row">
+                <div class="col mb-3">
+                    <label for="formGroupExampleInput" class="form-label">{{pform.last_name.label_tag}}</label><br>
+                    {{pform.last_name}}{{pform.last_name.errors}}
+                </div>
+            </div>
+    
+    
+            {% comment %} This is the child information {% endcomment %}
+            <div class="row container-minor mb-3" style="border:1px solid #cecece;">
+                <div class="row mt-2">
+                    <div class="col">
+                        <label for="formGroupExampleInput" class="form-label">{{cform.first_name.label_tag}}</label><br>
+                        {{cform.first_name}}{{cform.first_name.errors}}
+                    </div>
+    
+                    <div class="col">
+                        <label for="formGroupExampleInput" class="form-label">{{cform.last_name.label_tag}}</label><br>
+                        {{cform.last_name}}{{cform.last_name.errors}}
+                    </div>
+    
+                    <div class="col">
+                        <label for="formGroupExampleInput" class="form-label">{{cform.dob.label_tag}}</label><br>
+                        {{cform.dob}}{{cform.dob.errors}}
+                    </div>
+                </div>
+            </div>
+    
+    
+            {% comment %} This is javascript to dynamically add more children to the form{% endcomment %}
+            <div class="row mb-3">
+                <div class="col">
+                    <button id='add' type="button" class="btn btn-success">Add</button>
+                    <!-- We Could Use
+                    <button id='add' type="button" class="btn btn-success">Sumit & Add Child</button>
+                    Submit forms get parent and use for submission in newly added siblings. Also, the
+                    parent and the first child become readonly -->
+                    <button id='remove' type="button" class="btn btn-danger">Remove</button>
+                </div>
+            </div>
+    <input style="margin-top: 50px;" type="submit" />
+    </form>
+                
+
+    
+    {% comment %} javascript and jquery 1.6.2 {% endcomment %}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+        let count = 0;
+        function cloneChildForm(){
+            let theHTML = `<div class="row container-minor mb-3" style="border:1px solid #cecece;">
+                <div class="row mt-2">
+                    <div class="col">
+                        <label for="formGroupExampleInput" class="form-label"><label for="id_first_name">First name:</label></label><br>
+                        <input type="text" name="first_name-${count}" maxlength="50" required id="id_first_name-${count}">
+                    </div>
+    
+                    <div class="col">
+                        <label for="formGroupExampleInput" class="form-label"><label for="id_last_name">Last name:</label></label><br>
+                        <input type="text" name="last_name-${count}" maxlength="50" id="id_last_name-${count}">
+                    </div>
+    
+                    <div class="col">
+                        <label for="formGroupExampleInput" class="form-label"><label for="id_dob">Dob:</label></label><br>
+                        <input placeholder='YYYY-MM-DD' type="text" name="dob-${count}" required id="id_dob-${count}">
+                    </div>
+                </div>
+            </div>`
+            return theHTML
+        }
+        function checkRemove() {
+            if ($('div.container-minor').length == 1) {
+                $('#remove').hide();
+            } else {
+                $('#remove').show();
+            }
+        };
+        $(document).ready(function () {
+            checkRemove()
+            $('#add').click(function () {
+                let newClone = cloneChildForm()
+                $('div.container-minor:last').after(newClone);
+                count++;
+                checkRemove();
+            });
+            $('#remove').click(function () {
+                $('div.container-minor:last').remove();
+                checkRemove();
+            });
+        });
+    </script>
+</body>
+</html>
