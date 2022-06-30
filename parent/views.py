@@ -36,19 +36,19 @@ def index(request):
                     # since cloned forms were separated by appending 
                     # numbers ('-0', '-1') to them, each submitted item will be 
                     # checked for whichever has appended number
-                    info = key.split('-')
-                    info0 = info[0]
-                    info1 = info[1]
+                    field_name_and_number_label = key.split('-')
+                    field_name = field_name_and_number_label[0]
+                    number_label = field_name_and_number_label[1]
                     try:
-                        # try to check for integer
-                        int(info1)
+                        # try to check if number label is integer
+                        int(number_label)
                         try:
                             # try to retrieve a child dictionary whose key is the above integer
-                            child = child_list[info1]
-                            child[info0] = value
+                            child = child_list[number_label]
+                            child[field_name] = value
                         except KeyError:
                             # create a child dictionary
-                            child_list[info1] = {info0:value}
+                            child_list[number_label] = {field_name:value}
                     except Exception:
                         # ignore if there is no integer
                         pass
@@ -106,19 +106,19 @@ class HomePageView(View):
                     # since cloned forms were separated by appending 
                     # numbers ('-0', '-1') to them, each submitted item will be 
                     # checked for whichever has appended number
-                    info = key.split('-')
-                    info0 = info[0]
-                    info1 = info[1]
+                    field_name_and_number_label = key.split('-')
+                    field_name = field_name_and_number_label[0]
+                    number_label = field_name_and_number_label[1]
                     try:
-                        # try to check for integer
-                        int(info1)
+                        # try to check if number label is integer
+                        int(number_label)
                         try:
                             # try to retrieve a child dictionary whose key is the above integer
-                            child = child_list[info1]
-                            child[info0] = value
+                            child = child_list[number_label]
+                            child[field_name] = value
                         except KeyError:
                             # create a child dictionary
-                            child_list[info1] = {info0:value}
+                            child_list[number_label] = {field_name:value}
                     except Exception:
                         # ignore if there is no integer
                         pass
