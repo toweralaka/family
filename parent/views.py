@@ -18,16 +18,18 @@ def index(request):
         pform = ParentForm(request.POST, prefix='parent')
         cform = ChildForm(request.POST)
         # check if appropriate data was submitted in forms
-        if pform.is_valid() and cform.is_valid():
+        if pform.is_valid():
             # save parent to database
             new_parent = pform.save()
-            # save child form that was created using django
-            # but dont store to database because a required 
-            # field(parent) has not been included
-            a_child = cform.save(commit=False)
-            # attach the parent to the saved child then commit to database
-            a_child.parent = new_parent
-            a_child.save()
+            # check if data was entered for child form
+            if cform.is_valid() and cform.data['first_name'] and cform.data['dob']:
+                # save child form that was created using django
+                # but dont store to database because a required 
+                # field(parent) has not been included
+                a_child = cform.save(commit=False)
+                # attach the parent to the saved child then commit to database
+                a_child.parent = new_parent
+                a_child.save()
             # filter through other subitted data to get the cloned forms 
             # and store in child list
             child_list = {}
@@ -88,16 +90,18 @@ class HomePageView(View):
         pform = ParentForm(request.POST, prefix='parent')
         cform = ChildForm(request.POST)
         # check if appropriate data was submitted in forms
-        if pform.is_valid() and cform.is_valid():
+        if pform.is_valid():
             # save parent to database
             new_parent = pform.save()
-            # save child form that was created using django
-            # but dont store to database because a required 
-            # field(parent) has not been included
-            a_child = cform.save(commit=False)
-            # attach the parent to the saved child then commit to database
-            a_child.parent = new_parent
-            a_child.save()
+            # check if data was entered for child form
+            if cform.is_valid() and cform.data['first_name'] and cform.data['dob']:
+                # save child form that was created using django
+                # but dont store to database because a required 
+                # field(parent) has not been included
+                a_child = cform.save(commit=False)
+                # attach the parent to the saved child then commit to database
+                a_child.parent = new_parent
+                a_child.save()
             # filter through other subitted data to get the cloned forms 
             # and store in child list
             child_list = {}
