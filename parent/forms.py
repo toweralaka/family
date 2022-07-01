@@ -10,9 +10,7 @@ class ParentForm(forms.ModelForm):
 
 
 class ChildForm(forms.ModelForm):
-    first_name = forms.CharField(required=False)
-    last_name = forms.CharField(required=False)
-    dob = forms.CharField(required=False, widget=forms.TextInput(attrs={'placeholder': 'YYYY-MM-DD'}))
+    dob = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'YYYY-MM-DD'}))
     class Meta:
         model = ChildName
         exclude = ('parent',)

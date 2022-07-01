@@ -7,6 +7,11 @@
     <title>Document</title>
 </head>
 <body>    
+    {% for field in cform %}
+        {% if field.errors %}
+           {{ field.name }} errors: {{ field.errors }}
+        {% endif %}
+    {% endfor %}
     <form method="post">
         {% csrf_token %}
     
@@ -36,23 +41,7 @@
     
     
             {% comment %} This is the child information {% endcomment %}
-            <div class="row container-minor mb-3" style="border:1px solid #cecece;">
-                <div class="row mt-2">
-                    <div class="col">
-                        <label for="formGroupExampleInput" class="form-label">{{cform.first_name.label_tag}}</label><br>
-                        {{cform.first_name}}{{cform.first_name.errors}}
-                    </div>
-    
-                    <div class="col">
-                        <label for="formGroupExampleInput" class="form-label">{{cform.last_name.label_tag}}</label><br>
-                        {{cform.last_name}}{{cform.last_name.errors}}
-                    </div>
-    
-                    <div class="col">
-                        <label for="formGroupExampleInput" class="form-label">{{cform.dob.label_tag}}</label><br>
-                        {{cform.dob}}{{cform.dob.errors}}
-                    </div>
-                </div>
+            <div id="first__child" class="row container-minor mb-3" style="border:1px solid #cecece;">
             </div>
     
     
@@ -104,13 +93,39 @@
                 $('#remove').show();
             }
         };
+        function getFirstChild(){
+            let theHTML = `
+                <div class="row mt-2">
+                    <div class="col">
+                        <label for="formGroupExampleInput" class="form-label">{{cform.first_name.label_tag}}</label><br>
+                        {{cform.first_name}}{{cform.first_name.errors}}
+                    </div>
+    
+                    <div class="col">
+                        <label for="formGroupExampleInput" class="form-label">{{cform.last_name.label_tag}}</label><br>
+                        {{cform.last_name}}{{cform.last_name.errors}}
+                    </div>
+    
+                    <div class="col">
+                        <label for="formGroupExampleInput" class="form-label">{{cform.dob.label_tag}}</label><br>
+                        {{cform.dob}}{{cform.dob.errors}}
+                    </div>
+                </div>`
+            $('#first__child').append(theHTML);
+        }
         $(document).ready(function () {
             checkRemove()
             $('#add').click(function () {
-                let newClone = cloneChildForm()
-                $('div.container-minor:last').after(newClone);
-                count++;
-                checkRemove();
+                let firstChild = $('#first__child div')
+                console.log(firstChild.length)
+                if(firstChild.length > 0){
+                    let newClone = cloneChildForm()
+                    $('div.container-minor:last').after(newClone);
+                    count++;
+                    checkRemove();
+                }else{
+                    getFirstChild();
+                }
             });
             $('#remove').click(function () {
                 $('div.container-minor:last').remove();
