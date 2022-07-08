@@ -3,6 +3,7 @@ from django.shortcuts import render
 from django.views import View
 from.models import ParentName, ChildName
 from .forms import ParentForm, ChildForm
+from .pdf import create_pdf
 # Create your views here.
 
 
@@ -67,10 +68,14 @@ def index(request):
                                 parent = new_parent
                                 )
                     new_child.save()
+                # create pdf
+                create_pdf(new_parent)
                 # redirect to same view
                 return HttpResponseRedirect('/')
         elif pform.is_valid():
-            pform.save()
+            new_parent = pform.save()
+            # create pdf
+            create_pdf(new_parent)
             return HttpResponseRedirect('/')
     return render(request, 'parent/index.html', {'pform': pform, 'cform': cform})
 
@@ -144,10 +149,14 @@ class HomePageView(View):
                                 parent = new_parent
                                 )
                     new_child.save()
+                # create pdf
+                create_pdf(new_parent)
                 # redirect to same view
                 return HttpResponseRedirect('/home/')
         elif pform.is_valid():
-            pform.save()
+            new_parent = pform.save()
+            # create pdf
+            create_pdf(new_parent)
             return HttpResponseRedirect('/home/')
         return render(request, self.template_name, {'pform': pform, 'cform': cform})
 
